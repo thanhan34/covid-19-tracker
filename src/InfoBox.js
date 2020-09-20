@@ -3,9 +3,9 @@ import React from 'react';
 import "./InfoBox.css";
 
 
-function InfoBox({title, cases, total, ...props}) {
+function InfoBox({title, cases, isRed, active, total, ...props}) {
     return (
-        <Card onClick={props.onClick} className="infoBox">
+        <Card onClick={props.onClick} className={`infoBox ${active && "infoBox--selected"} ${ isRed && "infoBox--red"}`}>
             <CardContent>
                 <Typography
                     color="textSecondary"
@@ -13,7 +13,7 @@ function InfoBox({title, cases, total, ...props}) {
                 >
                     {title}
                 </Typography>
-                <h2 className="infoBox__cases">{cases}</h2>
+                <h2 className={`infoBox__cases ${!isRed && "infoBox__cases--green"}`}>{cases}</h2>
                 <Typography color="textSecondary" className="infoBox__total">
                     {total} Total
                 </Typography>

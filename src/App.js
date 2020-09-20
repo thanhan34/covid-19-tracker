@@ -56,8 +56,13 @@ function App() {
       .then(data => {
         setCountry(countryCode);
         setCountryInfo(data);
+        if (countryCode === "worldwide") {
+          setMapCenter({ lat: 34.80746, lng: -40.4796});
+          setMapZoom(3);
+        } else {
         setMapCenter([data.countryInfo.lat, data.countryInfo.long])
         setMapZoom(4);
+        }
       })
   }
 
@@ -84,17 +89,22 @@ function App() {
         </div>
 
         <div className="app__stats">
-          <InfoBox 
+          <InfoBox
+            isRed
+            active={casesType === "cases"} 
             onClick = {e=> setCasesType("cases")}
             title="Coronavirus Cases" 
             total={prettyPrintStart(countryInfo.cases)} 
             cases={prettyPrintStart(countryInfo.todayCases)} />
           <InfoBox 
+            active={casesType === "recovered"} 
             onClick = {e=> setCasesType("recovered")}
             title="Recovered" 
             total={prettyPrintStart(countryInfo.recovered)} 
             cases={prettyPrintStart(countryInfo.todayRecovered)} />
           <InfoBox 
+            isRed
+            active={casesType === "deaths"} 
             onClick = {e=> setCasesType("deaths")}
             title="Death" 
             total={prettyPrintStart(countryInfo.deaths)} 
@@ -112,8 +122,8 @@ function App() {
           <CardContent>
               <h3>Live Cases by Country</h3>
               <Table countries={tableData}/>
-              <h3>Worldwide new cases</h3>
-              <LineGraph />
+              <h3 className="app__graphTitle">Worldwide new {casesType}</h3>
+              <LineGraph className="app__graph" casesType={casesType}/>
           </CardContent>
       </Card>        
     </div>
