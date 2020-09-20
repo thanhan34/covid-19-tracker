@@ -4,7 +4,7 @@ import { Card,CardContent,FormControl, MenuItem, Select } from "@material-ui/cor
 import InfoBox from "./InfoBox";
 import Map from "./Map";
 import Table from "./Table";
-import { sortData } from './util';
+import { sortData , prettyPrintStart } from './util';
 import LineGraph from './LineGraph';
 import "leaflet/dist/leaflet.css";
 function App() {
@@ -15,6 +15,8 @@ function App() {
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796});
   const [mapZoom, setMapZoom] = useState(3);
   const [mapCountries, setMapCountries] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
+
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
       .then(response => response.json())
@@ -82,17 +84,26 @@ function App() {
         </div>
 
         <div className="app__stats">
-          <InfoBox title="Coronavirus Cases" total={countryInfo.cases} cases={countryInfo.todayCases} />
-          <InfoBox title="Recovered" total={countryInfo.recovered} cases={countryInfo.todayRecovered} />
-          <InfoBox title="Death" total={countryInfo.deaths} cases={countryInfo.todayDeaths} />
+          <InfoBox 
+            onClick = {e=> setCasesType("cases")}
+            title="Coronavirus Cases" 
+            total={prettyPrintStart(countryInfo.cases)} 
+            cases={prettyPrintStart(countryInfo.todayCases)} />
+          <InfoBox 
+            onClick = {e=> setCasesType("recovered")}
+            title="Recovered" 
+            total={prettyPrintStart(countryInfo.recovered)} 
+            cases={prettyPrintStart(countryInfo.todayRecovered)} />
+          <InfoBox 
+            onClick = {e=> setCasesType("deaths")}
+            title="Death" 
+            total={prettyPrintStart(countryInfo.deaths)} 
+            cases={prettyPrintStart(countryInfo.todayDeaths)} />
 
         </div>
 
-
-        {/*Table*/}
-        {/*Graph*/}
-        {/*Map*/}
-        <Map 
+        <Map
+          casesType={casesType} 
           countries={mapCountries}
           center={mapCenter} 
           zoom={mapZoom}/>
